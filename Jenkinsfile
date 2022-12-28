@@ -159,6 +159,11 @@ pipeline {
                  }
              }
          }
+    stage('Remove Zed docker ') {
+      steps{
+        sh 'docker rmi owasp/zap2docker-stable'
+    }   
+      }
     
 }
 
