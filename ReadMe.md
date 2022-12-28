@@ -1,4 +1,4 @@
-<p>Here is a list of a few tools that we have used to set up our DevSecOps pipeline.</p>
+<p>Here is a list of a few tools that we can use to set up our DevSecOps pipeline.</p>
 
 <table>
   <thead>
