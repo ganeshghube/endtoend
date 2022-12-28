@@ -26,6 +26,13 @@ pipeline {
         sh 'cp jenkinsci/* .'
       }
     }
+    stage('compose Anchore') {
+      steps {
+        sh '/usr/local/bin/docker-compose up -d'
+        sh 'sleep 1m'
+        sh '/usr/local/bin/docker-compose exec api anchore-cli system status'
+      }
+    }
     stage('SAST - Validate Dockerfile') {
       steps{
         //sh 'checkov -d . --framework dockerfile'
@@ -161,7 +168,9 @@ pipeline {
          }
     stage('Remove Zed docker ') {
       steps{
-        sh 'docker rmi owasp/zap2docker-stable'
+        sh 'docker stop $(docker ps -a -q)'
+        sh 'docker rm $(docker ps -a -q)'
+        sh 'docker rmi $(docker images -a -q)'
     }   
       }
     
