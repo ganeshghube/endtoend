@@ -22,8 +22,8 @@ pipeline {
     stage('Cloning Git') {
       steps {
         sh "rm -rf *"
-        sh "git clone https://github.com/ganeshghube/endtoend.git ."
-        //sh 'cp endtoend/* .'
+        sh "git clone https://github.com/ganeshghube/endtoend.git"
+        sh 'cp endtoend/* .'
       }
     }
     stage('Compose Anchore Scanner') {
