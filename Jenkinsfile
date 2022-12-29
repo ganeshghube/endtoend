@@ -44,20 +44,15 @@ pipeline {
             echo 'Anchore Engine is up'
 			
         }
-		elseif {
-            echo 'Validate the status'
-			sh '/usr/local/bin/docker-compose exec api anchore-cli system status'
-        }
          }
       }
     }
-    stage('Compose Anchore Scanner') {
+    stage('Validate  Anchore Scanner') {
       steps {
         //sh '/usr/local/bin/docker-compose up -d'
         sh 'sleep 40s'
         //sh '/usr/local/bin/docker-compose exec api anchore-cli system status'
 
-        
       }
     }
     stage('SAST-Validate Dockerfile') {
