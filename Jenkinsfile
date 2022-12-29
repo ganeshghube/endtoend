@@ -19,11 +19,15 @@ pipeline {
                  name: 'GENERATE_REPORT'
      }
   stages {
-    stage('Cloning Git') {
+    stage('Cloning Git and Cleanup') {
       steps {
-        sh "rm -rf *"
-        sh "git clone https://github.com/ganeshghube/endtoend.git"
-        sh 'cp endtoend/* .'
+        sh 'rm -rf .git && rm -rf *'
+        sh 'git clone https://github.com/ganeshghube/endtoend.git .'
+        //sh "git clone https://github.com/ganeshghube/endtoend.git"
+        //sh 'cp endtoend/* .'
+        //sh 'docker stop $(docker ps -a -q)'
+        //sh 'docker rm $(docker ps -a -q)'
+        //sh 'docker image ls -q | xargs -I {} docker image rm -f {}'
       }
     }
     stage('Compose Anchore Scanner') {
