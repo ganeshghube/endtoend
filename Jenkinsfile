@@ -22,24 +22,24 @@ pipeline {
     stage('Cloning Git') {
       steps {
         sh "rm -rf *"
-        sh "git clone https://github.com/ganeshghube/endtoend.git"
-        sh 'cp endtoend/* .'
+        sh "git clone https://github.com/ganeshghube/endtoend.git ."
+        //sh 'cp endtoend/* .'
       }
     }
-    stage('compose Anchore') {
+    stage('Compose Anchore Scanner') {
       steps {
         sh '/usr/local/bin/docker-compose up -d'
         sh 'sleep 1m'
         sh '/usr/local/bin/docker-compose exec api anchore-cli system status'
       }
     }
-    stage('SAST - Validate Dockerfile') {
+    stage('SAST-Validate Dockerfile') {
       steps{
         //sh 'checkov -d . --framework dockerfile'
         sh 'checkov -d . --skip-check CKV_DOCKER_7 --framework dockerfile'
       }
     }
-    stage('Building image') {
+    stage('Building Image') {
       steps{
         script {
           dockerImage = docker.build registry + ":$BUILD_NUMBER"
@@ -55,20 +55,20 @@ pipeline {
         }
       }
     }
-    stage('Remove Unused docker image') {
+    stage('Remove Unused Docker Image') {
       steps{
         sh "docker rmi $registry:$BUILD_NUMBER"
     }   
       }
 	  
-	 stage('SAST Scan Docker image') {
+	 stage('SAST Scan Docker Image') {
       steps{
 		writeFile file: 'anchore_images', text:"$registry:$BUILD_NUMBER"
 		anchore name: 'anchore_images' , bailOnFail: false, engineRetries: '1800'
 	    anchore engineCredentialsId: 'anchoreengine', engineurl: 'http://localhost:8228/v1', forceAnalyze: true, name: 'anchore_images'
 		}
     }
-	stage('Remove Running pods') {
+	stage('Remove Running Pods') {
       steps{
 		 //sh "kubectl delete pods,services,deployments,svc --all"
 		 sh "pwd"
@@ -166,7 +166,7 @@ pipeline {
                  }
              }
          }
-    stage('Remove Zed docker ') {
+    stage('Remove all Dockers images and containers ') {
       steps{
         sh 'docker stop $(docker ps -a -q)'
         sh 'docker rm $(docker ps -a -q)'
