@@ -22,8 +22,8 @@ pipeline {
     stage('Cloning Git') {
       steps {
         sh "rm -rf *"
-        sh "git clone https://github.com/ganeshghube/jenkinsci.git"
-        sh 'cp jenkinsci/* .'
+        sh "git clone https://github.com/ganeshghube/endtoend.git"
+        sh 'cp endtoend/* .'
       }
     }
     stage('compose Anchore') {
@@ -170,7 +170,7 @@ pipeline {
       steps{
         sh 'docker stop $(docker ps -a -q)'
         sh 'docker rm $(docker ps -a -q)'
-        sh 'docker rmi $(docker images -a -q)'
+        sh 'docker image ls -q | xargs -I {} docker image rm -f {}'
     }   
       }
     
