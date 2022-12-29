@@ -30,11 +30,34 @@ pipeline {
         //sh 'docker image ls -q | xargs -I {} docker image rm -f {}'
       }
     }
+    stage('Validate')  {
+    steps {
+         script {
+			 echo 'Validate Containers...'
+             rc = sh( script: "/usr/local/bin/docker-compose exec api anchore-cli system status | grep apiext | awk \'{print \$5}\'",
+                             returnStdout: true).trim()
+             echo "rc: ${rc}"
+		if (rc != 'up') {
+            echo 'Ancore Engine is Not UP Bringing up containers'
+            sh '/usr/local/bin/docker-compose up -d'
+        } else {
+            echo 'Anchore Engine is up'
+			
+        }
+		elseif {
+            echo 'Validate the status'
+			sh '/usr/local/bin/docker-compose exec api anchore-cli system status'
+        }
+         }
+      }
+    }
     stage('Compose Anchore Scanner') {
       steps {
-        sh '/usr/local/bin/docker-compose up -d'
-        sh 'sleep 1m'
-        sh '/usr/local/bin/docker-compose exec api anchore-cli system status'
+        //sh '/usr/local/bin/docker-compose up -d'
+        sh 'sleep 40s'
+        //sh '/usr/local/bin/docker-compose exec api anchore-cli system status'
+
+        
       }
     }
     stage('SAST-Validate Dockerfile') {
