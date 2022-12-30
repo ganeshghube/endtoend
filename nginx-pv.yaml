@@ -48,6 +48,8 @@ spec:
       volumeMounts:
         - mountPath: "/usr/share/nginx/html"
           name: nginx-storage
+      securityContext:
+          allowPrivilegeEscalation: false
   volumes:
     - name: nginx-storage
       persistentVolumeClaim:
