@@ -34,8 +34,6 @@ metadata:
   namespace: Ganesh Ghube
   livenessProbe:
     initialDelaySeconds: 1
-
-
 spec:
   containers:
     - name: nginx-container
@@ -54,8 +52,13 @@ spec:
       volumeMounts:
         - mountPath: "/usr/share/nginx/html"
           name: nginx-storage
+      automountServiceAccountToken: false
       securityContext:
           allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: nginx
+          type: DockerDefault
           capabilities:
                   drop:
                     - NET_RAW
