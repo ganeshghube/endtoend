@@ -51,6 +51,10 @@ spec:
           name: nginx-storage
       securityContext:
           allowPrivilegeEscalation: false
+          capabilities:
+                  drop:
+                    - NET_RAW
+                    - ALL
   volumes:
     - name: nginx-storage
       persistentVolumeClaim:
