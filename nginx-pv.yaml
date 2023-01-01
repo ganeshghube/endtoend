@@ -32,8 +32,6 @@ kind: Pod
 metadata:
   name: nginx-pv-pod
   namespace: Ganesh Ghube
-  livenessProbe:
-    initialDelaySeconds: 1
 spec:
   containers:
     - name: nginx-container
@@ -63,6 +61,23 @@ spec:
                   drop:
                     - NET_RAW
                     - ALL
+      livenessProbe:
+		     failureThreshold: 3
+		     httpGet:
+			   port: 80
+			   scheme: HTTP
+		     initialDelaySeconds: 10
+		     periodSeconds: 10
+		     successThreshold: 1
+		     timeoutSeconds: 1
+		  readinessProbe:
+		     failureThreshold: 3
+		     httpGet:
+			   port: 80
+			   scheme: HTTP
+		     periodSeconds: 10
+		     successThreshold: 1
+		     timeoutSeconds: 1
 
   volumes:
     - name: nginx-storage
